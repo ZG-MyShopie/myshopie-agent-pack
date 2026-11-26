@@ -23,6 +23,12 @@ description: >-
 - Phrases like “list it” / “put on eBay” mean **draft** unless the human clearly says publish live / confirm publish.
 - **Never** call `publish_ebay_listing` or `purge_unpublished_ebay_draft` without explicit human `confirm: true`.
 - **Never** unpublish / EndItem / delete live eBay listings (platform forbids it).
+- **Scan images + text for IP / marks before upload.** Before attaching any image to MyShopie or pushing an eBay draft, open/inspect **each** product picture and the listing text. Flag for **explicit merchant review** (do not upload that image / do not continue to eBay draft with it) if you see or read any of:
+  - Trademark marks: ™, ®, or clear brand-logo lockups that look like third-party marks you should not redistribute
+  - Copyright notices: ©, “Copyright”, “All rights reserved”, watermarked rights lines
+  - CE (or similar conformity) marks/labels burned into the image or claimed in the copy when you cannot verify the merchant may use that claim
+  - Source-marketplace watermarks / “Amazon’s Choice” style badges baked into the photo
+  - If unsure whether a mark is present → **flag**, do not assume it is fine
 - **Rewrite** source copy — do not paste Amazon legal text verbatim; prefer German for `EBAY_DE`.
 - Cap plain descriptions ~3500 chars (eBay inventory hard cap 4000).
 - Never invent prices or stock — use values the merchant supplies.
@@ -30,14 +36,15 @@ description: >-
 ## Happy path (one SKU)
 
 1. Fetch source URL (Amazon.de / Kaufland / OTTO). Extract title, bullets, specs, image HTTPS URLs, price hint.
-2. Rewrite DE title (≤80 chars) + paragraphs; optional EN; build channel HTML.
-3. `create_product_from_channel_brief` with `status: draft`, SKU, price, stock, `paragraphs_de`, `image_urls`.
-4. Map MyShopie category → eBay leaf: `search_ebay_categories` → save mapping / product override via admin or category-map APIs.
-5. `get_ebay_category_aspects` + `preflight_ebay_export` — fill **every** `required` aspect (product attributes / attribute-map). Example: `Geeigneter Herdtyp`.
-6. `create_ebay_listing_draft` with optional `channel_description_html`.
-7. Show draft summary (listing id, publish_state, missing aspects). Wait for human approval.
-8. Only then `publish_ebay_listing` with `confirm: true`.
-9. Verify with `list_marketplace_listings` / remote by-sku / item URL.
+2. **IP / marks gate:** scan every candidate image and the extracted text for ™ ® © / Copyright / CE / watermarks. List any hits for the merchant; exclude or hold those assets until they decide (skip image, replace, or approve).
+3. Rewrite DE title (≤80 chars) + paragraphs; optional EN; build channel HTML (still no verbatim Amazon legal text; no unapproved CE/TM claims in copy).
+4. `create_product_from_channel_brief` with `status: draft`, SKU, price, stock, `paragraphs_de`, and only **cleared** `image_urls`.
+5. Map MyShopie category → eBay leaf: `search_ebay_categories` → save mapping / product override via admin or category-map APIs.
+6. `get_ebay_category_aspects` + `preflight_ebay_export` — fill **every** `required` aspect (product attributes / attribute-map). Example: `Geeigneter Herdtyp`.
+7. `create_ebay_listing_draft` with optional `channel_description_html`.
+8. Show draft summary (listing id, publish_state, missing aspects, any IP flags already cleared). Wait for human approval.
+9. Only then `publish_ebay_listing` with `confirm: true`.
+10. Verify with `list_marketplace_listings` / remote by-sku / item URL.
 
 ## Inventory draft blocking a classic re-export
 

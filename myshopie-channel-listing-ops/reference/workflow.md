@@ -12,6 +12,13 @@
 - [ ] Capture: title, bullet benefits, pack contents, materials, compatibility, image URLs (https), suggested price/qty from merchant
 - [ ] If fetch blocked, ask staff to paste “About this item” / HTML
 
+## 1b. IP / marks scan (before any MyShopie upload)
+
+- [ ] Open **each** product image and inspect for ™ ® ©, Copyright / “All rights reserved”, CE (or similar) marks, brand watermarks, marketplace badges burned into the photo
+- [ ] Scan title + description text for the same (™ ® © / Copyright / CE claims)
+- [ ] If any hit **or** unsure → stop and **flag for explicit merchant review** (list image URL + what was seen); do not upload that image or push eBay draft with it until merchant says skip / replace / approve
+- [ ] Only cleared images proceed to MyShopie / eBay
+
 ## 2. Rewrite
 
 - [ ] German title ≤ 80 characters for EBAY_DE
@@ -19,11 +26,12 @@
 - [ ] Optional EN translation for storefront
 - [ ] Channel HTML (`h2`/`h3`/`p`/`ul`) stored via `channel_description_html`
 - [ ] No Amazon trademarks / “Amazon’s Choice” / seller-specific claims
+- [ ] No unapproved CE / TM / copyright wording carried into rewritten copy
 
 ## 3. MyShopie product
 
 - [ ] `create_product_from_channel_brief` (`status: draft`)
-- [ ] Images attached (`image_urls` or `POST /products/{id}/images-from-urls`)
+- [ ] Images attached — **cleared only** (`image_urls` or `POST /products/{id}/images-from-urls`)
 - [ ] Wait until media `status=completed` with https `cdn_url` before classic publish
 - [ ] SKU unique — on 422 reuse existing product
 

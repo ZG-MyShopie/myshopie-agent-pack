@@ -75,11 +75,14 @@ Ask Claude to run:
 
 5. **Never invent** prices, stock, SKUs, or required aspect values. Ask the merchant.
 
-6. **Rewrite** source copy. Prefer **German** for `EBAY_DE`. Cap plain text ~3500 chars (eBay inventory hard cap 4000).
+6. **Scan every product image and the listing text before MyShopie upload / eBay draft.**  
+   Flag for **explicit merchant review** (do not upload that image or continue with it) if you see or read: ™ ® ©, “Copyright” / “All rights reserved”, CE (or similar) marks/claims, or source-marketplace watermarks/badges in the photo. If unsure → flag. Only cleared images go into `image_urls`.
 
-7. **No POS** tools. Tenant keys cannot use platform-admin tools.
+7. **Rewrite** source copy. Prefer **German** for `EBAY_DE`. Cap plain text ~3500 chars (eBay inventory hard cap 4000). Do not carry unapproved CE/TM/copyright claims into rewritten copy.
 
-8. On **403**: explain missing API key scope vs staff permission — do not retry blindly.  
+8. **No POS** tools. Tenant keys cannot use platform-admin tools.
+
+9. On **403**: explain missing API key scope vs staff permission — do not retry blindly.  
    On **401**: key/store mismatch — ask for a new key.  
    On **422** aspect/Trading errors: fix attributes, re-preflight, then draft/push — do not force live publish.
 
@@ -101,14 +104,15 @@ After draft create, verify: `publish_state=draft` and **no** live `external_list
 
 1. Human provides: source URL, SKU, price, stock, any aspect overrides.  
 2. Fetch/extract title, bullets, specs, HTTPS image URLs (if blocked, ask for pasted HTML).  
-3. Rewrite DE title (≤80 chars) + paragraphs; optional EN; build channel HTML.  
-4. `create_product_from_channel_brief` (`status: draft`, `image_urls` ≤12).  
-5. `search_ebay_categories` → map leaf category; set product attributes for **all** required aspects (`get_ebay_category_aspects` / `preflight_ebay_export`).  
-6. `create_ebay_listing_draft` (+ optional `channel_description_html` / `set_listing_channel_description`).  
-7. Show draft summary (ids, title, price, aspects, description excerpt). **Wait.**  
-8. Only after explicit approval: `publish_ebay_listing` with `confirm: true`.  
-9. Verify published listing id / URL.  
-10. If blocked by an unpublished Inventory offer for the SKU: purge with confirm, ensure `classic`, create classic draft again.
+3. **IP / marks gate:** inspect each image + text for ™ ® © / Copyright / CE / watermarks; flag hits for merchant; only cleared images continue.  
+4. Rewrite DE title (≤80 chars) + paragraphs; optional EN; build channel HTML.  
+5. `create_product_from_channel_brief` (`status: draft`, cleared `image_urls` ≤12).  
+6. `search_ebay_categories` → map leaf category; set product attributes for **all** required aspects (`get_ebay_category_aspects` / `preflight_ebay_export`).  
+7. `create_ebay_listing_draft` (+ optional `channel_description_html` / `set_listing_channel_description`).  
+8. Show draft summary (ids, title, price, aspects, description excerpt, IP flags cleared). **Wait.**  
+9. Only after explicit approval: `publish_ebay_listing` with `confirm: true`.  
+10. Verify published listing id / URL.  
+11. If blocked by an unpublished Inventory offer for the SKU: purge with confirm, ensure `classic`, create classic draft again.
 
 ### Batch
 

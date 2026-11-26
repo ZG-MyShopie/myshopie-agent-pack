@@ -26,3 +26,4 @@ When managing a MyShopie store via MCP:
 5. **Minimal writes** — patch only the fields/settings you intend to change; read first with get_* tools.
 6. **No POS** — do not attempt POS/cashier endpoints; they are out of scope for merchant MCP v1.
 7. **No live eBay end/unpublish** — MyShopie never withdraws or ends marketplace listings remotely.
+8. **IP / marks scan before channel import** — before uploading product images to MyShopie or drafting/publishing on eBay, inspect **each** image and the listing text for ™ ® © / Copyright / CE marks (and source watermarks). Any hit or uncertainty → **flag for explicit merchant review**; do not upload or push that asset until they skip, replace, or approve.
