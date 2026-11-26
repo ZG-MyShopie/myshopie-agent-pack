@@ -10,13 +10,14 @@ Rewrite the German description (don't paste Amazon text).
 Create a MyShopie draft + eBay draft only — do not publish until I confirm.
 ```
 
-## Flag IP / marks on images
+## Flag IP / marks but keep drafting
 
 ```
-Before uploading images or creating the eBay draft, scan every product photo
-and the listing text for ™ ® © / Copyright / CE marks or watermarks.
-If you find any (or are unsure), list the image URLs and what you saw, and
-wait for my review — do not upload those images until I say skip, replace, or approve.
+Scan every product photo and the listing text for ™ ® © / Copyright / CE marks
+or watermarks. Keep creating MyShopie + eBay drafts even if you find issues.
+At the end, give me a table of flagged SKUs with the issue, image URL(s), and
+the MyShopie draft admin URL so I can review visually — then ask me what to do
+before any live publish.
 ```
 
 ## Missing required aspect

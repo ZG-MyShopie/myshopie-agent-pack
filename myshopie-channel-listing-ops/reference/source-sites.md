@@ -23,16 +23,16 @@ These are **sources** only. Destination listing channel is eBay via MyShopie.
 
 ## IP / marks scan (images + text)
 
-Before uploading any image to MyShopie or creating an eBay draft:
+While importing (do **not** stop the draft pipeline):
 
 1. Visually inspect **every** gallery image (open the URL; do not skip).
-2. Flag for **explicit merchant review** if the image or listing text shows:
+2. **Flag** (record for the end-of-run report) if the image or listing text shows:
    - ™ or ® (or obvious third-party trademark lockups)
    - © / “Copyright” / “All rights reserved” / rights watermarks
    - CE (or similar conformity) marks or claims you cannot verify the merchant may use
    - Source-marketplace watermarks or badges baked into the photo
-3. If unsure → flag. Do not upload or push the flagged asset until the merchant chooses skip, replace, or approve.
-4. Only merchant-cleared images go into `image_urls` / MyShopie / eBay.
+3. If unsure → flag (conservative). Still create MyShopie + eBay **drafts**.
+4. At the end of the SKU or batch: show all flags + each MyShopie admin draft URL (`…/products/{id}/edit`) and ask how to proceed before any live publish.
 
 ## Rewrite rules
 
@@ -42,4 +42,4 @@ Before uploading any image to MyShopie or creating an eBay draft:
 4. Prefer structured channel HTML: headings + short paragraphs + bullet list for pack contents.
 5. Include induction / hob compatibility only when the source states it.
 6. Do not copy ASIN, Amazon standard product IDs, or “sold by Amazon” language into eBay copy.
-7. Do not carry unapproved CE / trademark / copyright claims from the source into rewritten copy.
+7. Do not invent CE / trademark / copyright claims in rewritten copy.

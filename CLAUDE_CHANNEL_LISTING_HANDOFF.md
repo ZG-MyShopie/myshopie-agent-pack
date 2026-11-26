@@ -75,10 +75,10 @@ Ask Claude to run:
 
 5. **Never invent** prices, stock, SKUs, or required aspect values. Ask the merchant.
 
-6. **Scan every product image and the listing text before MyShopie upload / eBay draft.**  
-   Flag for **explicit merchant review** (do not upload that image or continue with it) if you see or read: ™ ® ©, “Copyright” / “All rights reserved”, CE (or similar) marks/claims, or source-marketplace watermarks/badges in the photo. If unsure → flag. Only cleared images go into `image_urls`.
+6. **Scan every product image and the listing text for IP / marks — keep drafting.**  
+   If you see or read ™ ® ©, “Copyright” / “All rights reserved”, CE (or similar) marks/claims, or source-marketplace watermarks/badges — **record a flag** (image URL + issue). If unsure → flag. Do **not** stop: still create MyShopie + eBay **drafts**. At the end of the SKU or batch, list all flags with each **MyShopie admin draft URL** (`…/products/{id}/edit`) and ask the merchant what to do before any live publish.
 
-7. **Rewrite** source copy. Prefer **German** for `EBAY_DE`. Cap plain text ~3500 chars (eBay inventory hard cap 4000). Do not carry unapproved CE/TM/copyright claims into rewritten copy.
+7. **Rewrite** source copy. Prefer **German** for `EBAY_DE`. Cap plain text ~3500 chars (eBay inventory hard cap 4000). Do not invent CE/TM/copyright claims in rewritten copy.
 
 8. **No POS** tools. Tenant keys cannot use platform-admin tools.
 
@@ -104,13 +104,13 @@ After draft create, verify: `publish_state=draft` and **no** live `external_list
 
 1. Human provides: source URL, SKU, price, stock, any aspect overrides.  
 2. Fetch/extract title, bullets, specs, HTTPS image URLs (if blocked, ask for pasted HTML).  
-3. **IP / marks gate:** inspect each image + text for ™ ® © / Copyright / CE / watermarks; flag hits for merchant; only cleared images continue.  
+3. **IP / marks scan:** inspect each image + text for ™ ® © / Copyright / CE / watermarks; record flags; **continue**.  
 4. Rewrite DE title (≤80 chars) + paragraphs; optional EN; build channel HTML.  
-5. `create_product_from_channel_brief` (`status: draft`, cleared `image_urls` ≤12).  
+5. `create_product_from_channel_brief` (`status: draft`, `image_urls` ≤12).  
 6. `search_ebay_categories` → map leaf category; set product attributes for **all** required aspects (`get_ebay_category_aspects` / `preflight_ebay_export`).  
 7. `create_ebay_listing_draft` (+ optional `channel_description_html` / `set_listing_channel_description`).  
-8. Show draft summary (ids, title, price, aspects, description excerpt, IP flags cleared). **Wait.**  
-9. Only after explicit approval: `publish_ebay_listing` with `confirm: true`.  
+8. Show draft summary + MyShopie admin draft URL (`…/products/{id}/edit`) + any IP flags. Ask what to do with flagged items. **Wait.**  
+9. Only after guidance + explicit approval: `publish_ebay_listing` with `confirm: true`.  
 10. Verify published listing id / URL.  
 11. If blocked by an unpublished Inventory offer for the SKU: purge with confirm, ensure `classic`, create classic draft again.
 
