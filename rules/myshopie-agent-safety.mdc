@@ -1,0 +1,28 @@
+---
+description: Safety rules for MyShopie MCP agents — destructive actions, storefront publish, refunds
+globs:
+alwaysApply: false
+---
+
+# MyShopie agent safety
+
+When managing a MyShopie store via MCP:
+
+1. **Draft before live** — storefront theme and layout edits stay in draft until `publish_storefront` with `confirm: true`. Prefer `apply_storefront_blueprint` for from-scratch builds. eBay create is **always draft** (`create_ebay_listing_draft` only; never create+live). Classic local drafts are not live. Go live only via `publish_ebay_listing` with `confirm: true` after explicit human approval.
+2. **Preview** — after storefront edits, call `create_storefront_preview_token` (or use blueprint `preview_url`) and share the preview URL before publishing. Visually QA before go-live.
+3. **Confirm destructive ops** — pass `confirm: true` only after the merchant explicitly approves:
+   - `delete_product`
+   - `refund_order`
+   - `publish_storefront`
+   - `publish_ebay_listing`
+   - `purge_unpublished_ebay_draft` (unpublished Inventory drafts only — never live listings)
+   - `reset_storefront_layout`
+   - `remove_homepage_section`
+   - `restore_storefront_version` with `publish: true`
+   - `delete_banner`, `delete_faq`, `delete_announcement`, `delete_social_link`, `delete_cms_page`
+   - `reset_storefront_template`, `reset_cms_page_layout`
+   - `apply_storefront_blueprint` with `reset_first: true` (needs `confirm_reset`)
+4. **Schema-guided only** — never invent section types; re-read `get_storefront_theme_schema` / `storefront://schema` on 422.
+5. **Minimal writes** — patch only the fields/settings you intend to change; read first with get_* tools.
+6. **No POS** — do not attempt POS/cashier endpoints; they are out of scope for merchant MCP v1.
+7. **No live eBay end/unpublish** — MyShopie never withdraws or ends marketplace listings remotely.

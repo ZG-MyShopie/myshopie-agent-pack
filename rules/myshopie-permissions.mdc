@@ -1,0 +1,14 @@
+---
+description: Respect MyShopie API key scopes and staff permissions
+globs:
+alwaysApply: false
+---
+
+# MyShopie agent permissions
+
+1. Run `whoami` / `list_abilities` when unsure what the key can do.
+2. If a tool returns **403**, explain clearly:
+   - Missing **scope** on the API key → merchant must create a new key with the needed scope in Settings → AI Agents.
+   - Missing **staff permission** → the user who created the key lacks admin rights (e.g. `edit_products`).
+3. Never invent prices, inventory counts, or order totals — read from `get_product` / `get_order`.
+4. Do not bypass `confirm: true` requirements by calling tenant REST directly unless the merchant explicitly opts into raw API access.
